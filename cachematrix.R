@@ -1,15 +1,39 @@
-## Put comments here that give an overall description of what your
-## functions do
+## The below two functions are inter-dependent. The first function 
+## creates a special matrix containing a flag to indicate if its already
+## inversed. The second function would inverse this special matrix if its
+## not already inversed.
 
-## Write a short comment describing this function
+
+## makeCacheMatrix function below will create a special matrix that can
+## cache its inverse.
 
 makeCacheMatrix <- function(x = matrix()) {
+	inv <- NULL
+
+	getinv <- function() inv
+	setinv <- function(inverse) inv <<- inverse
+	getmatrix <- function() x
+	
+	list(getinv = getinv, 
+			setinv = setinv, 
+			getmatrix = getmatrix)
 
 }
 
 
-## Write a short comment describing this function
+## This function would first check if the passed matrix is already inversed.
+## If not, it will inverse the matrix.
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+	i <- x$getinv()
+
+	if (!is.null(i)) {
+		message("Getting cached inverse matrix")
+		return (i)
+	}
+
+	matrix <- x$getmatrix()
+	i = solve(matrix)
+	x$setinv(i)
+	i
 }
